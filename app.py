@@ -4,6 +4,7 @@ from flask_login import LoginManager
 
 import models
 
+
 DEBUG = True
 PORT = 8000
 
@@ -14,7 +15,16 @@ app.secret_key = "this is the secret key"
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+@login_manager.user_loader
+def load_user(userid):
+	try:
+		return models.User.get(models.User.id == userid)
+	except models.DoesNotExist:
+		return None
 
+@login_manager.unauthorized_handler
+def unauthorized():
+	return jsonify(data={'error':'You must be logged in to view this page'}, status={'code':401, 'message':'You must be logged in to access that resource'}), 401
 
 
 @app.before_request

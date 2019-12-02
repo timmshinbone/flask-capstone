@@ -12,4 +12,5 @@ peewee==3.12.0
 psycopg2==2.8.4
 pycparser==2.19
 six==1.13.0
+virtualenv==16.7.8
 Werkzeug==0.16.0
