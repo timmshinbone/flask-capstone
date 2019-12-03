@@ -67,18 +67,22 @@ def show_one_friendships(id):
 @friendships.route('/<id>', methods=['PUT'])
 def friend_decider(id):
 	payload = request.get_json()
-	print("This is payload for friend decision", payload)
+	
 	friendship = models.Friendship.get_by_id(id)
-	friendship_dict = model_to_dict(friendship)
-	##REMOVE SENSITIVE INFO##
-	friendship_dict['user_one'].pop('password')
-	friendship_dict['user_one'].pop('email')
-	friendship_dict['user_two'].pop('password')
-	friendship_dict['user_two'].pop('email')
-	########################################
-	print(friendship_dict, "<---This is friendship_dict")
-	if(current_user.id == friendship_dict['user_two']['id']):
-		friendship_dict['status'] = payload['status']
+
+	if(current_user.id == friendship.user_two.id):
+		
+		friendship.status = payload['status']
+		friendship.save()
+		friendship = models.Friendship.get_by_id(id)
+		friendship_dict = model_to_dict(friendship)
+		##REMOVE SENSITIVE INFO##
+		friendship_dict['user_one'].pop('password')
+		friendship_dict['user_one'].pop('email')
+		friendship_dict['user_two'].pop('password')
+		friendship_dict['user_two'].pop('email')
+		########################################
+		
 		return jsonify(data=friendship_dict, status={'code': 200, 'message': "Success"})
 	else:
 		return jsonify(data="Forbidden", status={'code': 403, 'message':'You are not authorized to edit this friend request'}), 403
