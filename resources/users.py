@@ -53,8 +53,21 @@ def login():
 		print('user not found')
 		return jsonify(data={}, status={'code': 401, 'message':'User not found'}), 401
 
+#user lists - do not display sensitive info
+@users.route('/', methods=['GET'])
+def list_users():
+	users = models.User.select()
+	print("\nThis is USERS")
+	print(users)
 
+	user_dicts = [model_to_dict(u) for u in users]
+	def remove_doxx(u):
+		u.pop('password')
+		u.pop('email')
+		return u
 
+	user_dicts_no_doxx = list(map(remove_doxx, user_dicts))
+	return jsonify(data=user_dicts_no_doxx), 200
 
 
 
