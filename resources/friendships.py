@@ -33,7 +33,19 @@ def make_friend_request(user1, user2):
 
 	return jsonify(data=friendship_dict, status={"code":201, "message": "Success"}), 201
 
+#show all friend requests
+@friendships.route('/', methods=['GET'])
+def show_all_friendships():
+	friendships = models.Friendship.select()
+	print(friendships, "this is the friend requests")
+	friendships_dicts = [model_to_dict(f) for f in friendships]
 
+	[x['user_one'].pop('password') for x in friendships_dicts]
+	[x['user_one'].pop('email') for x in friendships_dicts]
+	[x['user_two'].pop('password') for x in friendships_dicts]
+	[x['user_two'].pop('email') for x in friendships_dicts]
+
+	return jsonify(data=friendships_dicts), 200
 
 
 
