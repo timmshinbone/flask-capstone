@@ -37,7 +37,6 @@ def register():
 @users.route('/login', methods=['POST'])
 def login():
 	payload = request.get_json()
-	print("This is payload -->", payload)
 	try:
 		user = models.User.get(models.User.username == payload['username'])
 		user_dict = model_to_dict(user)

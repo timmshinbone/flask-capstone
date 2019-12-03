@@ -37,7 +37,6 @@ def make_friend_request(user1, user2):
 @friendships.route('/', methods=['GET'])
 def show_all_friendships():
 	friendships = models.Friendship.select()
-	print(friendships, "this is the friend requests")
 	friendships_dicts = [model_to_dict(f) for f in friendships]
 
 	[x['user_one'].pop('password') for x in friendships_dicts]
@@ -52,7 +51,6 @@ def show_all_friendships():
 @friendships.route('/<id>', methods=['GET'])
 def show_one_friendships(id):
 	friendship = models.Friendship.get_by_id(id)
-	print(friendship, "this is the friend request")
 	friendship_dict = model_to_dict(friendship)
 
 	friendship_dict['user_one'].pop('password')
@@ -60,7 +58,35 @@ def show_one_friendships(id):
 	friendship_dict['user_two'].pop('password')
 	friendship_dict['user_two'].pop('email')
 
-	return jsonify(data=friendship_dict, status={"code": 200, 'message':'Found friend request with id{}'.format(friendship.id)}), 200
+	return jsonify(data=friendship_dict, status={"code": 200, 'message':'Found friend request with id {}'.format(friendship.id)}), 200
+
+
+#accept, deny, or block friendship
+#0 for pending, #1 for friends, #2 for declined, #3 for blocked, 
+
+@friendships.route('/<id>', methods=['PUT'])
+def friend_decider(id):
+	payload = request.get_json()
+	print("This is payload for friend decision", payload)
+	friendship = models.Friendship.get_by_id(id)
+	friendship_dict = model_to_dict(friendship)
+	##REMOVE SENSITIVE INFO##
+	friendship_dict['user_one'].pop('password')
+	friendship_dict['user_one'].pop('email')
+	friendship_dict['user_two'].pop('password')
+	friendship_dict['user_two'].pop('email')
+	########################################
+	print(friendship_dict, "<---This is friendship_dict")
+	if(current_user.id == friendship_dict['user_two']['id']):
+		friendship_dict['status'] = payload['status']
+		return jsonify(data=friendship_dict, status={'code': 200, 'message': "Success"})
+	else:
+		return jsonify(data="Forbidden", status={'code': 403, 'message':'You are not authorized to edit this friend request'}), 403
+
+
+
+
+
 
 
 
