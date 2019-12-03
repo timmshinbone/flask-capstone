@@ -36,6 +36,7 @@ class Transaction(Model):
 	sender = ForeignKeyField(User, backref='transactions')
 	receiver = ForeignKeyField(User, backref='transactions')
 	date = DateField(default=datetime.datetime.now())
+	viewed = BooleanField(default=False)
 
 	class Meta:
 		database = DATABASE
