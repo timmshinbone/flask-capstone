@@ -69,6 +69,36 @@ def list_users():
 	user_dicts_no_doxx = list(map(remove_doxx, user_dicts))
 	return jsonify(data=user_dicts_no_doxx), 200
 
+#Individual show page for user
+@users.route('/<id>', methods=['GET'])
+def get_one_user(id):
+	user = models.User.get_by_id(id)
+	print(user)
+	user_dict = model_to_dict(user)
+	user_dict.pop('password')
+	user_dict.pop('email')
+	return jsonify(data=user_dict, status={'code': 200, 'message':'Found user with id {}'.format(user.id)})
+
+#check current user
+@users.route('/loggedin', methods=['GET'])
+def get_logged_in_user():
+	if not current_user.is_authenticated:
+		return jsonify(data={}, status={'code': 401, 'message':'No user is currently logged in'}), 401
+	else:
+		print(current_user)
+		print(model_to_dict(current_user))
+		user_dict = model_to_dict(current_user)
+		user_dict.pop('password')
+		user_dict.pop('email')
+		return jsonify(user_dict)
+
+#logout route
+@users.route('/logout', methods=['GET'])
+def logout():
+	username = model_to_dict(current_user)['username']
+	logout_user()
+	return jsonify(data={}, status={'code': 200, 'message': "Successfully logged out {}".format(username)})
+
 
 
 
