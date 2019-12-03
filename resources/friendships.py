@@ -48,6 +48,21 @@ def show_all_friendships():
 	return jsonify(data=friendships_dicts), 200
 
 
+#show one friend request
+@friendships.route('/<id>', methods=['GET'])
+def show_one_friendships(id):
+	friendship = models.Friendship.get_by_id(id)
+	print(friendship, "this is the friend request")
+	friendship_dict = model_to_dict(friendship)
+
+	friendship_dict['user_one'].pop('password')
+	friendship_dict['user_one'].pop('email')
+	friendship_dict['user_two'].pop('password')
+	friendship_dict['user_two'].pop('email')
+
+	return jsonify(data=friendship_dict, status={"code": 200, 'message':'Found friend request with id{}'.format(friendship.id)}), 200
+
+
 
 
 
