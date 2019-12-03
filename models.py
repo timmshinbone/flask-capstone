@@ -15,7 +15,11 @@ class User(UserMixin, Model):
 class Friendship(Model):
 	user_one = ForeignKeyField(User, backref='friendships')
 	user_two = ForeignKeyField(User, backref='friendships')
-	status = IntegerField() #0 for pending, 1 for friends, 2 for declined, 3 for blocked
+	status = IntegerField(default=0) 
+			#0 for pending, 
+			#1 for friends, 
+			#2 for declined, 
+			#3 for blocked, 
 
 	class Meta:
 		database = DATABASE
