@@ -4,6 +4,7 @@ from flask_login import LoginManager
 
 from resources.users import users
 from resources.friendships import friendships
+from resources.postcards import postcards
 
 
 import models
@@ -45,9 +46,11 @@ def after_request(response):
 
 CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
 CORS(friendships, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(postcards, origins=['http://localhost:3000'], supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(friendships, url_prefix='/api/v1/friendships')
+app.register_blueprint(postcards, url_prefix='/api/v1/postcards')
 
 if __name__ == '__main__':
 	models.initialize()
