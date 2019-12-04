@@ -70,7 +70,7 @@ def friend_decider(id):
 	
 	friendship = models.Friendship.get_by_id(id)
 
-	if(current_user.id == friendship.user_two.id):
+	if(current_user.id == friendship.user_two.id or current_user.id == friendship.user_one.id):
 		
 		friendship.status = payload['status']
 		friendship.save()
