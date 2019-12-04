@@ -53,8 +53,20 @@ def get_transactions():
 	########################################################
 	return jsonify(data=transactions_dicts), 200
 
-
-
+##View one transaction
+@transactions.route('/<id>', methods=['GET'])
+def show_one_transaction(id):
+	transaction = models.Transaction.get_by_id(id)
+	transaction_dict = model_to_dict(transaction)
+	##REMOVE SENSITIVE INFO##################################
+	transaction_dict['postcard']['creator'].pop('password')
+	transaction_dict['postcard']['creator'].pop('email')
+	transaction_dict['sender'].pop('password')
+	transaction_dict['sender'].pop('email')
+	transaction_dict['receiver'].pop('password')
+	transaction_dict['receiver'].pop('email')
+	#########################################################
+	return jsonify(data=transaction_dict, status={"code": 200, 'message':'Found transaction with id{}'.format(transaction.id)})
 
 
 
