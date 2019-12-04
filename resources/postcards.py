@@ -75,7 +75,12 @@ def update_postcard(id):
 @login_required
 def delete_postcard(id):
 	postcard_to_delete = models.Postcard.get_by_id(id)
-	if
+	if (postcard_to_delete.creator.id != current_user.id):
+		return jsonify(data="Forbidden", status={"code": 403, "message":"Users can only delete their own postcards"}), 403
+	else:
+		postcard_to_delete.delete_instance()
+		return jsonify(data="Postcard Successfully Deleted", status={"code": 200, "message":"The postcard has successfully been deleted"}), 200
+
 
 
 
