@@ -51,8 +51,31 @@ def get_one_postcard(id):
 	postcard_dict['creator'].pop('email')
 	return jsonify(data=postcard_dict, status={"code": 200, "message":"Found Postcard with id{}".format(postcard.id)}), 200
 
+#postcard message edit route route
+@postcards.route('/<id>', methods=['PUT'])
+@login_required
+def update_postcard(id):
+	payload = request.get_json()
+	postcard = models.Postcard.get_by_id(id)
 
+	if(postcard.creator.id == current_user.id):
+		postcard.drawing = payload['drawing'] if 'drawing' in payload else None
+		postcard.message = payload['message'] if 'message' in payload else None
+		postcard.save()
 
+		postcard_dict = model_to_dict(postcard)
+		postcard_dict['creator'].pop('password')
+		postcard_dict['creator'].pop('email')
+		return jsonify(data=postcard_dict, status={"code":200, "message": "Successfully Updated Postcard"}), 200
+	else:
+		return jsonify(data="Forbidden", status={"code": 403, "message":"You are not authorized to edit this"}), 403
+
+#postcard delete route
+@postcards.route('/<id>', methods=['Delete'])
+@login_required
+def delete_postcard(id):
+	postcard_to_delete = models.Postcard.get_by_id(id)
+	if
 
 
 
