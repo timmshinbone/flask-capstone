@@ -46,10 +46,10 @@ def after_request(response):
 	g.db.close()
 	return response
 
-CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
-CORS(friendships, origins=['http://localhost:3000'], supports_credentials=True)
-CORS(postcards, origins=['http://localhost:3000'], supports_credentials=True)
-CORS(transactions, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(users, origins=['http://localhost:3000', 'https://gopostcard.herokuapp.com'], supports_credentials=True)
+CORS(friendships, origins=['http://localhost:3000', 'https://gopostcard.herokuapp.com'], supports_credentials=True)
+CORS(postcards, origins=['http://localhost:3000', 'https://gopostcard.herokuapp.com'], supports_credentials=True)
+CORS(transactions, origins=['http://localhost:3000', 'https://gopostcard.herokuapp.com'], supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(friendships, url_prefix='/api/v1/friendships')
