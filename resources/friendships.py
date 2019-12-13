@@ -88,6 +88,14 @@ def friend_decider(id):
 		return jsonify(data="Forbidden", status={'code': 403, 'message':'You are not authorized to edit this friend request'}), 403
 
 
+#friendships delete route
+@friendships.route('/<id>', methods=['Delete'])
+def delete_friendship(id):
+	friendship_to_delete = models.Friendship.get_by_id(id)
+	
+	friendship_to_delete.delete_instance()
+	return jsonify(data="Friendship Successfully Deleted", status={"code": 200, "message":"The friendship has successfully been deleted"}), 200
+
 
 
 

@@ -70,7 +70,7 @@ def update_postcard(id):
 	else:
 		return jsonify(data="Forbidden", status={"code": 403, "message":"You are not authorized to edit this"}), 403
 
-#postcard delete route
+#postcard delete route`
 @postcards.route('/<id>', methods=['Delete'])
 @login_required
 def delete_postcard(id):
